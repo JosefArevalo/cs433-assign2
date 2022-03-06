@@ -27,11 +27,11 @@ int main(){
         fgets(str, sizeof str, stdin);
         
         int x = 0;
-        args[x] = strtok(str, " ");
+        args[x] = strtok(str, " \n");
         while (args[x] != NULL){
             //printf("%s\n", args[x]);
             x++;
-            args[x] = strtok(NULL, " ");
+            args[x] = strtok(NULL, " \n");
 
         }
 
@@ -44,7 +44,7 @@ int main(){
             return 1;
         }
         else if(pid == 0){
-            execvp(args[0], &args[1]);
+            execvp(args[0], &args[0]);
         }
         else{
             wait(NULL);
