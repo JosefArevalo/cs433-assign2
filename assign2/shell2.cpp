@@ -3,6 +3,8 @@
 #include <sys/types.h>
 #include <string.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <iostream>
 
 using namespace std;
@@ -44,7 +46,20 @@ int main(){
             return 1;
         }
         else if(pid == 0){
-            execvp(args[0], &args[0]);
+            char gr = *">";
+            char lr = *"<";
+            if(*args[1] == gr || *args[1] == lr){
+                if(*args[1] == gr){
+                    int fds = open(args[2], O_WRONLY);
+                    dup2(fds, 1);
+                    execvp(args[0], &args[2]);
+                    close(0);
+                }
+            }
+            else{
+                execvp(args[0], &args[0]);
+                exit(127);
+            }
         }
         else{
             wait(NULL);
